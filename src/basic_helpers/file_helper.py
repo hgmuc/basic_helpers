@@ -95,7 +95,7 @@ def get_next_version_fname(kw: str, data_base_path: FilePath) -> str:
 
 # Check subfolders in Level directories
 def get_act_dir_list(d: str, lvl: Union[str, int], data_base_path: str) -> bool:
-    return os.path.exists(os.path.join(data_base_path, lvl, d))
+    return os.path.exists(os.path.join(data_base_path, str(lvl), d))
     # Alt solution with Path
     # return (data_base_path / str(lvl) / d).exists()
 
