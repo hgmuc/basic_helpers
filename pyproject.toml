@@ -7,7 +7,7 @@ name = "basic_helpers"
 version = "0.1.0"
 description = "File helpers and global config params."
 readme = "README.md"
-requires-python = ">=3.10.14"
+requires-python = ">=3.10"
 dependencies = ["shapely>=2.0.0", "numpy>=1.26.0", "typing_extensions>=4.12.2"]  # only Numpy, Pandas and custom packages; not Python standard libraries like gzip, zipfile, ...
 
 [project.optional-dependencies]
