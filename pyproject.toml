@@ -13,8 +13,7 @@ dependencies = ["shapely>=2.0.0", "numpy>=1.26.0"]  # only Numpy, Pandas and cus
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
-    "pytest-cov"
-    # "mypy",
+    "pytest-cov",
     "ruff",
 ]  # use locally with venv pip install -e .[dev]  OR   pip install -e .[dev,typecheck]
 typecheck = ["mypy"]
