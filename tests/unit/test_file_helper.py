@@ -3,8 +3,8 @@
 #import gzip
 import zipfile
 import pytest
-#from pathlib import Path
-from unittest.mock import patch
+from pathlib import Path
+#from unittest.mock import patch
 
 # Assuming the source functions are in basic_helpers.file_helper
 from basic_helpers.file_helper import (
@@ -27,9 +27,33 @@ def test_pickle_roundtrip(tmp_path, sample_dict):
     loaded = do_unpickle(fname)
     assert loaded == sample_dict
 
-def test_unpickle_exception_returns_none(tmp_path):
+def test_do_unpickle_success(tmp_path: Path):
+    """Verify that a valid pickle file is loaded correctly."""
+    data = {"key": "value"}
+    fname = tmp_path / "test_data.pkl"
+    do_pickle(data, str(fname))
+        
+    result = do_unpickle(str(fname))
+    assert result == data
+
+def test_unpickle_file_not_found_raises(tmp_path: Path):
+    """
+    Verify that a non-existent file raises an exception.
+    Updated to reflect the new fatal error behavior.
+    """
     fname = tmp_path / "non_existent.pkl"
-    assert do_unpickle(fname) is None
+    
+    # We use pytest.raises to assert that an Exception (specifically FileNotFoundError) occurs
+    with pytest.raises(FileNotFoundError):
+        do_unpickle(str(fname))
+
+def test_unpickle_corrupt_file_raises(tmp_path: Path):
+    """Verify that a corrupted file raises a pickle-related exception."""
+    fname = tmp_path / "corrupt.pkl"
+    fname.write_text("this is not a pickle file")
+    
+    with pytest.raises(Exception):
+        do_unpickle(str(fname))
 
 def test_gzip_pickle_roundtrip(tmp_path, sample_dict):
     fname = tmp_path / "test.pkl.gz"
@@ -41,6 +65,19 @@ def test_gzip_pickle_roundtrip(tmp_path, sample_dict):
         
     loaded = do_ungzip_pkl(fname)
     assert loaded == sample_dict
+
+def test_gzip_pickle_roundtrip_filenotfoun(tmp_path, sample_dict):
+    fname = tmp_path / "test.pkl.gz"
+    fname_wrong = tmp_path / "wrong_test.pkl.gz"
+    do_gzip_pkl(sample_dict, fname)
+    
+    # Verify it's actually gzipped
+    with open(fname, "rb") as f:
+        assert f.read(2) == b'\x1f\x8b' # Gzip magic number
+
+    # We use pytest.raises to assert that an Exception (specifically FileNotFoundError) occurs
+    with pytest.raises(FileNotFoundError):
+        do_ungzip_pkl(fname_wrong)
 
 def test_gzip_text_roundtrip(tmp_path):
     fname = tmp_path / "test.txt.gz"
