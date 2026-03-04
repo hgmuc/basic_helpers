@@ -45,11 +45,11 @@ def test_fname_list_filtering():
         assert key not in fname_list, f"{key} (external) should have been excluded from fname_list"
 
     assert len(fname_list) == 105
-    assert len(excl_fnames) == 32
+    assert len(excl_fnames) == 31
     assert len(ext_fnames) == 20
     assert len(ext_fnames2) == 5
     assert len(ext_fnames3) == 7
-    assert len(ext_fnames_admin) == 20
+    assert len(ext_fnames_admin) == 21
 
 def test_fname_admin_list_content():
     """Verify specific required keys are in the admin list."""
@@ -76,9 +76,9 @@ def test_upd_packages_type_integrity():
 
 def test_translit_consistency():
     """Ensure Greek and Cyrillic keys are bundled in translit."""
-    assert len(fnames_cyr) == 16
-    assert len(fnames_el) == 4
-    assert len(fnames_translit) == 24
+    assert len(fnames_cyr) == 12
+    assert len(fnames_el) == 2
+    assert len(fnames_translit) == 16
     assert "GR" in fnames_translit  # From fnames_el
     assert "RU" in fnames_translit  # From fnames_cyr
     assert "ARM" in fnames_translit # Manually added

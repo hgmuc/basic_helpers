@@ -1,7 +1,36 @@
-UpdatePkgs = dict[int, dict[str, str]] 
+from typing import Dict, Final, Literal, Union, List, cast
+
+FnamesValid = Literal['AL', 'AN', 'AT', 'BE', 'BG', 'BIH', 'CH', 'CPV', 'CYP', 'CZ', 
+                      'DE-BB', 'DE-BR', 'DE-BW', 'DE-BY', 'DE-HE', 'DE-HH', 'DE-MV', 'DE-NDS', 
+                      'DE-NRW', 'DE-RLP', 'DE-SA', 'DE-SAAR', 'DE-SAN', 'DE-SH', 'DE-TH', 
+                      'DK', 'ES-AN', 'ES-AR', 'ES-AS', 'ES-BA', 'ES-CA', 'ES-CE', 'ES-CL', 
+                      'ES-CM', 'ES-CN', 'ES-CT', 'ES-EX', 'ES-GA', 'ES-MA', 'ES-ME', 'ES-MU', 
+                      'ES-NA', 'ES-PV', 'ES-RI', 'ES-VA', 'EST', 'FI', 
+                      'FR-ALSA', 'FR-AQUI', 'FR-AUVE', 'FR-BANO', 'FR-BOUR', 'FR-BRET', 'FR-CHAR', 
+                      'FR-CNTR', 'FR-CORS', 'FR-FRCO', 'FR-HANO', 'FR-ILFR', 'FR-LARO', 'FR-LIMO', 
+                      'FR-LORR', 'FR-MIPY', 'FR-NPDC', 'FR-PDLL', 'FR-PICA', 'FR-POCH', 'FR-PROV', 
+                      'FR-RALP', 'FRO', 'GB-ENG', 'GB-MAN', 'GB-SCO', 'GB-WAL', 'GR', 'GUE', 'HR', 
+                      'HU', 'IE', 'ISL', 'IT-CTRO', 'IT-ISOL', 'IT-NEST', 'IT-NOVE', 'IT-SUD', 
+                      'KO', 'LAT', 'LI', 'LIT', 'LU', 'MAC', 'MAL', 'MNT', 'MON', 
+                      'NL-DR', 'NL-FL', 'NL-FR', 'NL-GE', 'NL-GR', 'NL-LI', 'NL-NB', 'NL-NH', 
+                      'NL-OV', 'NL-UT', 'NL-ZE', 'NL-ZH', 'NO', 
+                      'PL-DOL', 'PL-KUJ', 'PL-LOD', 'PL-LUBE', 'PL-LUBU', 'PL-MAL', 'PL-MAZ', 'PL-OPO', 
+                      'PL-PODK', 'PL-PODL', 'PL-POM', 'PL-SLA', 'PL-SWI', 'PL-WAR', 'PL-WIE', 'PL-ZAC', 
+                      'PT', 'RO', 'RS', 'SI', 'SK', 'SM', 'SW', 'TR', 'RU-KAL', 'MDA']
+
+FnamesInvalid = Literal['ARM', 'BLR', 'CY-LVL5', 'Catalunya', 'DE', 'DE-NDS_SA_TH_LVL4', 'ES2', 'FR-NW_LVL4', 
+                        'FR-O_LVL4', 'FR-SW_LVL4', 'FR2', 'GB', 'GB-ENG2', 'GB-ENG_WAL', 'GB-SCO2', 'GEO', 
+                        'GUE-JER', 'Girona', 'IE-LVL5', 'IT', 'IT-ER_LA_PU_LVL4', 'LIT2', 'LT-SIA', 'LVL6_1', 
+                        'LVL6_2', 'LVL6_3', 'LVL6_4', 'MON2', 'NL2', 'NO2', 'OBB', 'PL', 'PT-MAD', 
+                        'PT2', 'RU', 'RU-KAL2', 'SM1', 'SM2', 'TR2', 'UA', 'LVL6_4', 'GUE-JER', 
+                        'BAY', 'FR', 'NL', 'ES']
+
+FnameKeys = Union[FnamesValid, FnamesInvalid]
+
+UpdatePkgs = Dict[int, dict[str, str]] 
 
 # OSM files config
-fnames: dict[str, str] = {}
+fnames: Final[Dict[FnameKeys, str]] = {}
 fnames['AN'] = "andorra-latest.osm.pbf"
 fnames['AT'] = "austria-latest.osm.pbf"
 fnames['BE'] = "belgium-latest.osm.pbf"
@@ -117,12 +146,6 @@ fnames['SI'] = "slovenia-latest.osm.pbf"
 fnames['SK'] = "slovakia-latest.osm.pbf"
 fnames['SM'] = "san-marino-overpass.osm.bz2"
 fnames['MON'] = "monaco-latest.osm.pbf"
-fnames['MON2'] = "admin/monaco.osm"
-fnames['FR2'] = "admin/france.osm"
-fnames['ES2'] = "admin/spain.osm"
-fnames['NL2'] = "admin/nederland.osm"
-fnames['Catalunya'] = "admin/catalunya.osm"
-fnames['Girona'] = "admin/girona.osm"
 
 fnames['NO'] = 'ext/norway-latest.osm.pbf'
 fnames['FI'] = 'ext/finland-latest.osm.pbf'
@@ -152,6 +175,13 @@ fnames['KO'] = 'ext/kosovo-latest.osm.pbf'
 fnames['AL'] = 'ext/albania-latest.osm.pbf'
 fnames['BG'] = 'ext/bulgaria-latest.osm.pbf'
 fnames['TR'] = 'ext/turkey-latest.osm.pbf'
+
+fnames['MON2'] = "admin/monaco.osm"
+fnames['FR2'] = "admin/france.osm"
+fnames['ES2'] = "admin/spain.osm"
+fnames['NL2'] = "admin/nederland.osm"
+fnames['Catalunya'] = "admin/catalunya.osm"
+fnames['Girona'] = "admin/girona.osm"
 
 fnames['NO2'] = 'admin/norway.osm'
 fnames['PT2'] = 'admin/portugal.osm'
@@ -195,21 +225,20 @@ fnames['FR-NW_LVL4'] = 'admin/fr_NW_lvl4.osm'
 fnames['FR-O_LVL4'] = 'admin/fr_O_lvl4.osm'
 fnames['FR-SW_LVL4'] = 'admin/fr_SW_lvl4.osm'
 
-ext_fnames2: list[str] = ['TR', 'GR', 'BG', 'AL', 'KO']
-ext_fnames3: list[str] = ['RU-KAL', 'CPV', 'UA', 'MDA', 'ARM', 'BLR', 'GEO']
-ext_fnames: list[str] = [
+ext_fnames2: list[FnamesValid] = ['TR', 'GR', 'BG', 'AL', 'KO']
+ext_fnames3: list[FnameKeys] = ['RU-KAL', 'CPV', 'UA', 'MDA', 'ARM', 'BLR', 'GEO']
+ext_fnames: list[FnamesValid] = [
     'NO', 'RO', 'GB-ENG', 'MNT', 'LIT', 'SW', 'IE', 'MAC', 'EST', 'BIH', 'GB-WAL', 
     'MAL', 'FI', 'GUE', 'GB-SCO', 'LAT', 'GB-MAN', 'CYP', 'ISL', 'FRO']
 
-ext_fnames_admin: list[str] = [
+ext_fnames_admin: list[FnamesInvalid] = [
     'NO2', 'PT2', 'GB', 'GB-ENG2', 'GB-SCO2', 'LIT2', 'PT-MAD', 'IE-LVL5', 'LT-SIA', 
     'CY-LVL5', 'RU-KAL2', 'DE', 'PL', 'IT', 'SM1', 'SM2', #'DE-NDS_SA_TH_LVL4', 
-    'IT-ER_LA_PU_LVL4', 'FR-NW_LVL4', 'GB-ENG_WAL', 'GUE-JER'
-    'LVL6_4']
+    'IT-ER_LA_PU_LVL4', 'FR-NW_LVL4', 'GB-ENG_WAL', 'GUE-JER', 'LVL6_4']
 
 # FR, IT, NL etc sind excluded, weil stattdessen die regionalen Files verwendet werden.
-excl_fnames: list[str] = [
-    'OBB', 'DACH', 'BAY', 'CPV', 'RU-KAL', 'FR', 'IT', 'PL', 'NL', 
+excl_fnames: List[FnameKeys] = [
+    'OBB', 'BAY', 'CPV', 'RU-KAL', 'FR', 'IT', 'PL', 'NL', 
     'DE', 'IT', 'SM1', 'DE-NDS_SA_TH_LVL4', 'FR-O_LVL4', 'FR-SW_LVL4', 
     'FR-NW_LVL4', 'GB-ENG_WAL', 
     'GUE-JER', 'LVL6_1', 'LVL6_2', 'LVL6_3', 'LVL6_4', 'IT-ER_LA_PU_LVL4', 
@@ -218,20 +247,22 @@ excl_fnames: list[str] = [
 fname: str = fnames['LI']
 #fname_list = ['HR', 'RS'] + [n for n in sorted(fnames) if n not in ['BAY', 'OBB', 'HR', 'RS', 'MON2', 'NL2', 'FR2', 'ES2', 
 #                                                                    'Catalunya', 'Girona']]
-fname_list: list[str] = [n for n in sorted(fnames) 
-                         if n not in ext_fnames + ext_fnames2 + 
-                                    ext_fnames3 + excl_fnames + ext_fnames_admin]
+fname_list: List[FnamesValid] = [cast(FnamesValid, n) for n in sorted(fnames) 
+                                 if n not in ext_fnames + ext_fnames2 + 
+                                 ext_fnames3 + excl_fnames + ext_fnames_admin]
 # fname_admin_list -> used in ReadAdminStructure to process the additional OSM files (e.g. admin/monaco.osm) as well
 # These have been downloaded from the Overpass API.
-fname_admin_list: list[str] = ['HR', 'RS'] + [n for n in sorted(fnames) 
-                                              if n not in ['BAY', 'OBB', 'HR', 'RS']]
+fname_admin_list: List[FnameKeys] = [cast(FnameKeys, fname) for fname in 
+                                     ['HR', 'RS'] + [n for n in sorted(fnames)
+                                     if n not in ['BAY', 'OBB', 'HR', 'RS']]]
 
-fnames_cyr: list[str] = [
-    'HR', 'RS', 'MAC', 'MNT', 'BG', 'RU-KAL', 'BLR', 'BL', 'BY', 
-    'UA', 'TJ', 'MN', 'RU-KAL2', 'RU', 'MDA', 'MD']  # MN = Mongolei
+fnames_cyr: List[FnameKeys] = [
+    'HR', 'RS', 'MAC', 'MNT', 'BG', 'RU-KAL', 'BLR', 
+    'UA', 'RU-KAL2', 'RU', 'MDA', 'MDA']  # MN = Mongolei, 'BL', 'BY', 'TJ', 'MN', 
 
-fnames_el: list[str] = ['GR', 'CYP', 'CY', 'CY-LVL5']
-fnames_translit: list[str] = fnames_cyr + fnames_el + ['GE', 'GEO', 'AM', 'ARM']  # Georgien und Armenien
+fnames_el: List[FnamesValid] = ['GR', 'CYP']
+fnames_other_writing: List[FnameKeys] = ['GEO', 'ARM'] # 'GE', 'AM' - 2-letter-codes für Georgien und Armenien
+fnames_translit: List[FnameKeys] = fnames_cyr + fnames_el + fnames_other_writing  # Georgien und Armenien
 
 # Mapping der FNAMES (Files) auf Länder-Kürzel in ADMIN_ID_HIERARCHY
 # In dieser Liste fehlt GI (Gibraltar), vmtl weil es kein FNAME hat, sondern bei Spanien dabei ist.
