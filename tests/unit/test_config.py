@@ -1,6 +1,4 @@
-import pytest
-import os
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 # We mock the dependency BEFORE importing config because config.py 
 # executes do_gzip_pkl at the top level upon import.

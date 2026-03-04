@@ -1,11 +1,12 @@
 import os
 from .file_helper import do_gzip_pkl   # keine Umstellung wg cycle import
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Final
 
 # External packages
 #PKG_DIRS = ['geom-helpers', 'basic-helpers', 'shape2code-helper', 'rd-observability', 'code-dem-helper',
 #            'env-api-helper', 'dtz-code-helper', 'llm-helpers', 'terrainclassifier', 'add-features', 'photon-helper']
 
+OsmWayId = int
 
 # Data directory
 data_base_path: str = 'C:\\01_AnacondaProjects\\osmium'
@@ -13,7 +14,7 @@ data_base_path: str = 'C:\\01_AnacondaProjects\\osmium'
 BIKESITE_CSV_PATH: str = "C:\\Users\\helmu\\Desktop\\Tracks\\bikesite-data1\\csv"
 
 
-BINNEN_REGIONS: List[str] = ['AT', 'CH', 'LI', 'LU', 'CZ', 'SK', 'HU', 'RS', 'MAC', 'AN', 'MDA', 'KO', 
+BINNEN_REGIONS: Final[List[str]] = ['AT', 'CH', 'LI', 'LU', 'CZ', 'SK', 'HU', 'RS', 'MAC', 'AN', 'MDA', 'KO', 
                   'DE-BY', 'DE-BW', 'DE-RLP', 'DE-SAAR', 'DE-HE', 'DE-NRW', 'DE-BB', 'DE-TH', 'DE-SAN', 'DE-SA', 
                   'PL-SLA', 'PL-MAL', 'PL-DOL', 'PL-KUJ', 'PL-LOD', 'PL-LUBE', 'PL-LUBU', 'PL-MAZ', 'PL-OPO', 'PL-PODK',
                   'PL-PODL', 'PL-SWI', 'PL-WIE', 'SM',
@@ -171,7 +172,7 @@ profile: str = ""   # one of "" | "mtb" | "roadbike"
 #PEDESTRIAN_AREAS = [178269048, # Fröttmaning U-Bahn
 
 
-INCLUDED_FTWYS: Set[int] = set([31512448, 108295773, 31512449, 129916610, 796668697, 398011267, 75672254, # Bahnhof Dachau
+INCLUDED_FTWYS: Final[Set[OsmWayId]] = set([31512448, 108295773, 31512449, 129916610, 796668697, 398011267, 75672254, # Bahnhof Dachau
                       90139983, 307043133, 1168594557, # U-Bahn Fröttmaning
                       1154606660, 1154606659, # Tutzing Schönmoosweg vom Bhf in Ri Süden zur Hauptstr
                       631036413, # Attel / Elend an der B15
