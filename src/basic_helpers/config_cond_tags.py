@@ -1,20 +1,20 @@
-from typing import Union, List, Dict, Set, Tuple
+from typing import Union, List, Dict, Set, Tuple, Final
 
-COND_TAGS: Set[str] = set([
+COND_TAGS: Final[Set[str]] = set([
     "access:conditional", "bicycle:conditional", "foot:conditional", "motor_vehicle:conditional",
     "oneway:conditional", "oneway:bicycle:conditional", "vehicle:conditional", "motorcar:conditional"])
     # 'mofa:conditional ', 'moped:conditional ', 'oneway:mofa:conditional', 'oneway:moped:conditional', 
 
 ## Process conditional tags
-MONTH_LS: List[str] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+MONTH_LS: Final[List[str]] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-MONTH_CORR: Dict[str, str] = {
-    'January': 'Jan', 'Januar': 'Jan', 'jan': 'Jan', 'January': 'Jan', 'JAN': 'Jan', 
-    'February': 'Feb', 'Februar': 'Feb', 'feb': 'Feb', 'February': 'Feb', 'FEB': 'Feb', 
+MONTH_CORR: Final[Dict[str, str]] = {
+    'January': 'Jan', 'Januar': 'Jan', 'jan': 'Jan', 'JAN': 'Jan', 
+    'February': 'Feb', 'Februar': 'Feb', 'feb': 'Feb', 'FEB': 'Feb', 
     'Mär': 'Mar', 'Marz': 'Mar', 'mar': 'Mar', 'March': 'Mar', 'MAR': 'Mar', 'Mrz': 'Mar', 'Maerz': 'Mar',
     'Abr': 'Apr', 'apr': 'Apr', 'Aprile': 'Apr', 'April': 'Apr', 'APR': 'Apr', 
     'Mai': 'May', 'may': 'May', 'MAY': 'May', 
-    'Juni': 'Jun', 'jun': 'Jun', 'June': 'Jun', 'JUN': 'Jun', 'jun': 'Jun',
+    'Juni': 'Jun', 'jun': 'Jun', 'June': 'Jun', 'JUN': 'Jun', 
     'Juli': 'Jul', 'jul': 'Jul', 'July': 'Jul', 'JUL': 'Jul', 
     'Ago': 'Aug', 'aug': 'Aug', 'August': 'Aug','AUG': 'Aug', 
     'September': 'Sep', 'Set': 'Sep', 'set': 'Sep', 'sep': 'Sep', 'Septembre': 'Sep', 'Sept': 'Sep', 'sept': 'Sep', 'SEP': 'Sep', 
@@ -22,9 +22,9 @@ MONTH_CORR: Dict[str, str] = {
     'november': 'Nov', 'nov': 'Nov', 'November': 'Nov', 'Novembre': 'Nov', 'NOV': 'Nov', 
     'December': 'Dec', 'Decembre': 'Dec', 'Dez': 'Dec', 'december': 'Dec', 'dec': 'Dec', 'DEC': 'Dec', }
 
-WEEKDAY_VALS: List[str] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'PH', 'SH']
+WEEKDAY_VALS: Final[List[str]]= ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'PH', 'SH']
 
-WEEKDAY_MAP_DICT: Dict[str, str] = {
+WEEKDAY_MAP_DICT: Final[Dict[str, str]] = {
     'Sunday': 'Su', 'sunr': 'sunr', 'Sunr': 'sunr', 'sund': 'sund', 
     'Sund': 'sund', 'suns': 'suns', 'Suns': 'suns', 
     'Mon': 'Mo', 'Tue': 'Tu', 'Wed': 'We', 'Thu': 'Th', 'Fri': 'Fr', 'Sat': 'Sa', 'Sun': 'Su', 
@@ -37,7 +37,7 @@ WEEKDAY_MAP_DICT: Dict[str, str] = {
     'ph': 'PH', 'Ph': 'PH', 'PH': 'PH', 'sh': 'SH', 'Sh': 'SH', 'SH': 'SH'}
 
 
-ACTION_KW: Dict[str, Tuple[str, Union[str, None]]] = {
+ACTION_KW: Final[Dict[str, Tuple[str, Union[str, None]]]] = {
     'yes': ('yes', None), 'no': ('no', None), 'destination': ('yes', 'destination'), 'public': ('yes', None), 
     'discouraged': ('discouraged', None), 'designated': ('yes', None), 'customers': ('yes', 'customers'), 
     'delivery': ('yes', 'delivery'), 'private': ('yes', 'private'), 'agricultural': ('yes', 'agricultural'), 
@@ -46,11 +46,11 @@ ACTION_KW: Dict[str, Tuple[str, Union[str, None]]] = {
     'taxi': ('yes', 'taxi'), 'psv': ('yes', 'psv'), 'seasonal': ('yes', 'seasonal'), 'PSV': ('yes', 'psv'), 
     'disabled': ('yes', 'disabled'), 'yes_opposite': ('yes', None)}
 
-FIX_ACTION_KW: Dict[str, str] = {
+FIX_ACTION_KW: Final[Dict[str, str]] = {
     '-1': 'yes_opposite', '1': 'yes', 'winter': 'yes @ winter', 'permit': 'yes', 'none': 'no', 
     'load-unload': 'delivery', 'hgv, motorcycle': 'hgv'}
 
-CLEAN_CONDS: Set[str] = {
+CLEAN_CONDS: Final[Set[str]] = {
     '(vehicle AND (PH ; PH+1 00:00 - 05:00))', 'hgv; yes', '(20:00+)', '21:00+', '(Altstadt)', 
     '(Su,PH,Su -1 day,PH -1 day)', '(sunset+1 - 07:00)', 'until End of October 2023', '(2021 Jun-)', 
     '(Mo-Sa 00:00-07:30,16.30-17.30; Su,PH 00:00-24:00; check website)', '(easter -49 days 13:00-17:00)',
