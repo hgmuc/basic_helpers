@@ -1,16 +1,18 @@
 from itertools import product
-from typing import TypedDict
+from typing import TypedDict, Literal, List, Tuple
 from typing_extensions import NotRequired
+
+RegKeys = Literal["DACH", "SCAN", "SUD", "IBERIA", "WNW", "OST", "SUDEST"]
 
 class RegParams(TypedDict):
     rows: str
     cols: str
     testrows: str
     testcols: str
-    extra: NotRequired[list[tuple[str, str]]]
+    extra: NotRequired[List[Tuple[str, str]]]
 
 
-REG_KEYS: dict[str, RegParams] = {'DACH': {'rows': '9ABCDEFGHIJK', 'cols': 'DEFGHIJKLMNOPQRST', 'testrows': '9A', 'testcols': 'LM'}, 
+REG_KEYS: dict[RegKeys, RegParams] = {'DACH': {'rows': '9ABCDEFGHIJK', 'cols': 'DEFGHIJKLMNOPQRST', 'testrows': '9A', 'testcols': 'LM'}, 
             'SUD': {'rows': '012345678yz', 'cols': 'GHIJKLMNOPQRST', 'testrows': '78', 'testcols': 'MN'}, 
             'IBERIA': {'rows': '012345678', 'cols': '0123456789ABCDEF', 'testrows': '01', 'testcols': '789'}, 
             'WNW': {'rows': '9ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'cols': '0123456789ABC', 'testrows': 'AB', 'testcols': 'AB'}, 
@@ -20,7 +22,7 @@ REG_KEYS: dict[str, RegParams] = {'DACH': {'rows': '9ABCDEFGHIJK', 'cols': 'DEFG
                        'extra': [('6', 'i'), ('6', 'j'), ('6', 'k')]}, 
            }
 
-REV_REG_KEYS: dict[str, str] = {}
+REV_REG_KEYS: dict[str, RegKeys] = {}
 
 for reg_key, vals in REG_KEYS.items():
     for r, c in product(vals['rows'], vals['cols']):
