@@ -3,8 +3,7 @@ import numpy as np
 from shapely.geometry import Polygon, GeometryCollection
 from basic_helpers.config_reg_code import (
     az_bbox, base_bbox, mapped_region, 
-    TOTAL_CELLS, BASE_CELLS, LATLON_CELL_PARAMS,
-    CellParams
+    TOTAL_CELLS, BASE_CELLS, LATLON_CELL_PARAMS
 )
 
 def test_bbox_coordinates_logic():
@@ -44,8 +43,8 @@ def test_latlon_cell_params_structure():
         assert set(params.keys()) == required_keys, f"Missing or extra keys in {region}"
         
         # Check specific types for x1/y1 (allowing int, float, or np.float32)
-        assert isinstance(params['x1'], (int, float, np.float32))
-        assert isinstance(params['y1'], (int, float, np.float32))
+        assert isinstance(params['x1'], (int, float, np.floating))
+        assert isinstance(params['y1'], (int, float, np.floating))
         
         # Check integer fields
         int_fields = ['x2', 'x3', 'y2', 'y3', 'extent_lon', 'extent_lat', 'n_lttr1', 'n_lttr2']
