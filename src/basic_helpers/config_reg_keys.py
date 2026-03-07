@@ -1,8 +1,8 @@
 from itertools import product
-from typing import TypedDict, Literal, List, Tuple
+from typing import TypedDict, Literal, List, Tuple, TypeAlias
 from typing_extensions import NotRequired
 
-RegKeys = Literal["DACH", "SCAN", "SUD", "IBERIA", "WNW", "OST", "SUDEST"]
+RegKeys: TypeAlias = Literal["DACH", "SCAN", "SUD", "IBERIA", "WNW", "OST", "SUDEST"]
 
 class RegParams(TypedDict):
     rows: str
