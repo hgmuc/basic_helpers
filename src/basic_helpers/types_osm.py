@@ -167,7 +167,7 @@ TagsetKey = NodesTagset | WayTagset | CWTagset | HikeTagset | Literal[-1]
 TagsetDict = dict[TagsetKey, TagsetId]
 
 RevTagsetDict = dict[TagsetId, TagsetKey]
-RevHikeTagsetiVals = tuple[
+RevHikeTagsetVals = tuple[
     Quality, Quality, WghtFct, WghtFct, WghtFct, WghtFct, WghtFct, WghtFct, TagVal, HikeSurface, ValidSmoothness, TagVal,
     TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal, TagVal]
 
