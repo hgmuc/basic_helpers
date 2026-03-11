@@ -13,6 +13,7 @@ Subcell = SubcellKey # 23
 CellSubcell = tuple[Cell, Subcell]
 
 RegCode = str
+RC = tuple[int, int]
 
 ParamsKey = Literal['base', 'iceland', 'azores', 'caboverde', 'canary', 'madeira']
 
