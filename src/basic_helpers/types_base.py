@@ -8,6 +8,8 @@ CoordinateInt: TypeAlias = tuple[int, int] | list[int]
 BBox: TypeAlias = tuple[CoordVal, CoordVal, CoordVal, CoordVal] | list[CoordVal]
 BBoxInt: TypeAlias = tuple[int, int, int, int] | list[int]
 
+Url: TypeAlias = str
+
 OsmNodeId: TypeAlias = int
 OsmWayId: TypeAlias = int
 OsmRelatId: TypeAlias = int
