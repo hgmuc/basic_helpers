@@ -1,7 +1,22 @@
-from typing import TypedDict
+from typing import TypedDict, TypeAlias
 from shapely.geometry.base import BaseGeometry
 
-from .types_base import OsmAreaId, BBox
+from .types_base import OsmAdminId, OsmAreaId, BBox
+from .types_osm import name, name_de, name_en, code
+from .config_reg_code import RegCode
+
+# Create a TypeAlias for the repetitive tuple to keep the Dict clean
+AdminTuple: TypeAlias = tuple[name, name_de, name_en, code, set[RegCode]]
+
+class Code2AdminIdsDict(TypedDict):
+    adm4: dict[OsmAdminId, AdminTuple]
+    adm5: dict[OsmAdminId, AdminTuple]
+    adm6: dict[OsmAdminId, AdminTuple]
+    adm7: dict[OsmAdminId, AdminTuple]
+    adm8: dict[OsmAdminId, AdminTuple]
+    adm9: dict[OsmAdminId, AdminTuple]
+    adm10: dict[OsmAdminId, AdminTuple]
+
 
 TourismAreaTagsDict = TypedDict('TourismAreaTagsDict', {
     "id": OsmAreaId,   
@@ -91,3 +106,4 @@ class TourismAreaTagsDictOLD(TypedDict, total=False):
 # 6 [('locality', 'ferry'), ('locality', 'railway'), ('tourism', 'historic_type'), ('tourism', 'tourism_type'), ('tourism', 'building_type')]
 # 7 [('tourism', 'bicycle_charging'), ('tourism', 'parking'), ('tourism', 'amenity_type')]
 # 8 [('guidepost_node', 'guidepost'), ('tourism', 'swimming')]
+
