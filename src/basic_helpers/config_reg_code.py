@@ -4,8 +4,8 @@ from shapely.geometry import box, GeometryCollection, Polygon
 from typing import List, TypedDict, Dict, Set, Literal
 from typing_extensions import NotRequired
 
-from .types_base import FlexNumeric, CoordinateInt, BBoxInt
-from .types_osm import CellKey, SubcellKey
+from basic_helpers.types_base import FlexNumeric, CoordinateInt, BBoxInt
+from basic_helpers.types_osm import CellKey, SubcellKey
 
 CellCode = str # AB23
 Cell = CellKey  # AB
@@ -13,6 +13,8 @@ Subcell = SubcellKey # 23
 CellSubcell = tuple[Cell, Subcell]
 
 RegCode = str
+RegCode7 = str
+RegCodePart = str
 RC = tuple[int, int]
 
 ParamsKey = Literal['base', 'iceland', 'azores', 'caboverde', 'canary', 'madeira']
