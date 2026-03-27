@@ -9,7 +9,8 @@ dynamic = ["version"]
 description = "File helpers and global config params."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["shapely>=2.0.0", "numpy>=1.26.4", "typing_extensions>=4.12.2"]  # only Numpy, Pandas and custom packages; not Python standard libraries like gzip, zipfile, ...
+dependencies = ["shapely>=2.0.0", "numpy>=1.26.4", "typing_extensions>=4.12.2", 
+                "requests>=2.32.3", "beautifulsoup4>=4.12.3"]  # only Numpy, Pandas and custom packages; not Python standard libraries like gzip, zipfile, ...
 
 [project.optional-dependencies]
 dev = [
@@ -24,6 +25,12 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "unit: fast isolated unit tests",
+    "integration: integration tests using real data",
+    "slow: slow tests",
+    "localdata: tests requiring local non-repo data"
+]
 
 [tool.ruff]
 line-length = 140
