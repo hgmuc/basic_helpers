@@ -1,5 +1,5 @@
 import os
-from .file_helper import do_gzip_pkl   # keine Umstellung wg cycle import
+from basic_helpers.file_helper import do_gzip_pkl   # keine Umstellung wg cycle import
 from typing import List, Dict, Set, Final, Literal, TypeAlias
 
 # External packages

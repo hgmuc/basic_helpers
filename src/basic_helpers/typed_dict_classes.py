@@ -1,9 +1,9 @@
 from typing import TypedDict, TypeAlias
 from shapely.geometry.base import BaseGeometry
 
-from .types_base import OsmAdminId, OsmAreaId, BBox
-from .types_osm import name, name_de, name_en, code
-from .config_reg_code import RegCode
+from basic_helpers.types_base import OsmAdminId, OsmAreaId, BBox
+from basic_helpers.types_osm import name, name_de, name_en, code
+from basic_helpers.config_reg_code import RegCode
 
 # Create a TypeAlias for the repetitive tuple to keep the Dict clean
 AdminTuple: TypeAlias = tuple[name, name_de, name_en, code, set[RegCode]]
