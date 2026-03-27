@@ -1,33 +1,46 @@
 import queue
 import multiprocessing.queues as mpq
-from typing import Literal, Any
+from typing import Literal, Any, TypeAlias
 from .config_pbf import FnamesValid
-from .types_osm import OsmWayId, OsmRelatId, OsmNodeId, WaysTuple, CellDataDict
+from .config_reg_code import RegCode
+from .types_osm import OsmWayId, OsmRelatId, OsmNodeId, WaysTuple, CellDataDict, SpecialKey
+from .types_base import OsmAdminId
+from .typed_dict_classes import Code2AdminIdsDict
 
-MapDictType = dict[str, dict[str, str | int | None]]
+MapDictType: TypeAlias = dict[str, dict[str, str | int | None]]
 
-SuperRouteType = dict[OsmRelatId, dict[str, str | int | None]]
-SRDictType = dict[OsmRelatId, dict[str, str | None | dict[OsmRelatId, tuple[int, str | None]]]]
-RouteDictType = dict  # bleibt leer
-RouteNodesType = dict[OsmNodeId, list[dict[str, str | OsmRelatId | None]]]
-RouteWaysType = dict[FnamesValid, dict[OsmWayId, dict[str, str | int | OsmRelatId | None]]]
-RDWaysSet = set[OsmWayId]
-RteWaysTuple = tuple[RouteWaysType, RDWaysSet, RouteWaysType | None, RouteWaysType | None, dict | None]
+SuperRouteType: TypeAlias = dict[OsmRelatId, dict[str, str | int | None]]
+SRDictType: TypeAlias = dict[OsmRelatId, dict[str, str | None | dict[OsmRelatId, tuple[int, str | None]]]]
+RouteDictType: TypeAlias = dict  # bleibt leer
+RouteNodesType: TypeAlias = dict[OsmNodeId, list[dict[str, str | OsmRelatId | None]]]
+RouteWaysType: TypeAlias = dict[FnamesValid, dict[OsmWayId, list[dict[str, str | int | OsmRelatId | None]]]]
+RDWaysSet: TypeAlias = set[OsmWayId]
+RteWaysTuple: TypeAlias = tuple[RouteWaysType, RDWaysSet, RouteWaysType | None, RouteWaysType | None, dict | None]
 
-RelatRelWaysType = dict[OsmRelatId | Literal[-1], Any] | None
-RegionDataType = dict[Literal['c', 'names', 'w'], dict[int | FnamesValid, Any]] | None
-CoastalWaterType = dict[Literal['c', 'names', 'w'], dict[int | FnamesValid, Any]] | None
+RelatRelWaysType: TypeAlias = dict[OsmRelatId | Literal[-1], Any] | None
+RegionDataType: TypeAlias = dict[Literal['c', 'names', 'w'], dict[int | FnamesValid, Any]] | None
+CoastalWaterType: TypeAlias = dict[Literal['c', 'names', 'w'], dict[int | FnamesValid, Any]] | None
 
-Lvl1RelatTypes = Literal['waterway', 'highway', 'railway', 'route', 'superroute', 'region',
+Lvl1RelatTypes: TypeAlias = Literal['waterway', 'highway', 'railway', 'route', 'superroute', 'region',
                          'hiking_route', 'hiking_superroute', 'mtb_route', 'mtb_superroute']
 
-Lvl1WayTypes = Literal['railway', 'road', 'waterway', 'cycling', 'tourism', 'treerow', 'region', 'coastline']
-Lvl1NodeTypes = Literal['locality', 'tourism']
+Lvl1WayTypes: TypeAlias = Literal['railway', 'road', 'waterway', 'cycling', 'tourism', 'treerow', 'region', 'coastline']
+Lvl1NodeTypes: TypeAlias = Literal['locality', 'tourism']
 
-QDictData = dict[OsmWayId, WaysTuple]
-QDictType = dict[FnamesValid, QDictData]
-WaysDataDictType = dict[FnamesValid, CellDataDict]
+AdminLvlKeys: TypeAlias = Literal['adm4', 'adm5', 'adm6', 'adm7', 'adm8', 'adm9', 'adm10']
 
 
-LocalQueueDefDict = dict[Lvl1WayTypes | Lvl1NodeTypes, queue.Queue]
-SharedQueueDefDict = dict[str, mpq.Queue]
+DestsDict: TypeAlias = dict[int, dict[str, tuple[int, str]]]
+
+
+Code2AdminRegCodeData: TypeAlias = dict[AdminLvlKeys, list[OsmAdminId]]
+Code2AdminDict: TypeAlias = dict[SpecialKey | RegCode, 
+                                 Code2AdminIdsDict | Code2AdminRegCodeData]
+
+QDictData: TypeAlias = dict[OsmWayId, WaysTuple]
+QDictType: TypeAlias = dict[FnamesValid, QDictData]
+WaysDataDictType: TypeAlias = dict[FnamesValid, CellDataDict]
+
+
+LocalQueueDefDict: TypeAlias = dict[Lvl1WayTypes | Lvl1NodeTypes, queue.Queue]
+SharedQueueDefDict: TypeAlias = dict[str, mpq.Queue]
