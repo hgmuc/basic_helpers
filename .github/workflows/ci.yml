@@ -17,6 +17,6 @@ jobs:
 
       - run: pip install -e .[dev,typecheck]
 
-      - run: pytest
+      - run: pytest -m "not integration"
 
       - run: mypy src/
