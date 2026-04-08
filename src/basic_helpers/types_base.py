@@ -8,11 +8,13 @@ OsmAdminIdStr: TypeAlias = str
 
 FlexNumeric: TypeAlias = int | float | np.floating
 CoordVal: TypeAlias = float | int | np.floating
+MVal: TypeAlias = FlexNumeric
 Coordinate: TypeAlias =  tuple[CoordVal, CoordVal] | list[CoordVal]
 CoordinateInt: TypeAlias = tuple[int, int] | list[int]
 CoordinateM: TypeAlias =  tuple[FlexNumeric, FlexNumeric] | list[FlexNumeric]
 BBox: TypeAlias = tuple[CoordVal, CoordVal, CoordVal, CoordVal] | list[CoordVal]
 BBoxInt: TypeAlias = tuple[int, int, int, int] | list[int]
+BBoxM: TypeAlias = tuple[MVal, MVal, MVal, MVal] | list[MVal]
 ElevInt: TypeAlias = int
 Elev: TypeAlias = int | float | np.floating
 
