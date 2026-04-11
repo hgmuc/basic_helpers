@@ -1,11 +1,11 @@
 import queue
 import multiprocessing.queues as mpq
 from typing import Literal, Any, TypeAlias
-from .config_pbf import FnamesValid
-from .config_reg_code import RegCode
-from .types_osm import OsmWayId, OsmRelatId, OsmNodeId, WaysTuple, CellDataDict, SpecialKey
-from .types_base import OsmAdminId
-from .typed_dict_classes import Code2AdminIdsDict
+from basic_helpers.config_pbf import FnamesValid
+from basic_helpers.config_reg_code import RegCode
+from basic_helpers.types_osm import OsmWayId, OsmRelatId, OsmNodeId, WaysTuple, CellDataDict, SpecialKey, CellKey, Lvl1AreaTypes
+from basic_helpers.types_base import OsmAdminId
+from basic_helpers.typed_dict_classes import Code2AdminIdsDict, UrbIdxAreaTracker
 
 MapDictType: TypeAlias = dict[str, dict[str, str | int | None]]
 
@@ -29,6 +29,7 @@ Lvl1NodeTypes: TypeAlias = Literal['locality', 'tourism']
 
 AdminLvlKeys: TypeAlias = Literal['adm4', 'adm5', 'adm6', 'adm7', 'adm8', 'adm9', 'adm10']
 
+UrbanityIdxDict: TypeAlias = dict[CellKey | RegCode, dict[Lvl1AreaTypes, UrbIdxAreaTracker]]
 
 DestsDict: TypeAlias = dict[int, dict[str, tuple[int, str]]]
 
@@ -40,7 +41,6 @@ Code2AdminDict: TypeAlias = dict[SpecialKey | RegCode,
 QDictData: TypeAlias = dict[OsmWayId, WaysTuple]
 QDictType: TypeAlias = dict[FnamesValid, QDictData]
 WaysDataDictType: TypeAlias = dict[FnamesValid, CellDataDict]
-
 
 LocalQueueDefDict: TypeAlias = dict[Lvl1WayTypes | Lvl1NodeTypes, queue.Queue]
 SharedQueueDefDict: TypeAlias = dict[str, mpq.Queue]
