@@ -1,10 +1,10 @@
 from __future__ import annotations
 import numpy as np
 from shapely.geometry.base import BaseGeometry
-from typing import Literal, Union, Dict, Tuple, List, TypedDict, Any, TypeAlias
-from .config_pbf import FnamesValid
-from .types_base import FlexNumeric, BBoxInt, TagVal
-from .types_base import OsmNodeId, OsmWayId, OsmRelatId, OsmAreaId
+from typing import Literal, Union, Dict, Tuple, List, TypedDict, NamedTuple, Any, TypeAlias, Protocol, runtime_checkable, TypeVar
+from basic_helpers.config_pbf import FnamesValid
+from basic_helpers.types_base import FlexNumeric, BBoxInt, TagVal, BBox
+from basic_helpers.types_base import OsmNodeId, OsmWayId, OsmRelatId, OsmAreaId
 #from .config_reg_code import BBoxInt, BBox
 #from osmium import Node, Way, Relation, Area
 
@@ -57,7 +57,7 @@ HikeSurface: TypeAlias = Literal['asphalt', 'forest_soil', 'grass', 'gravel/sand
                       'rubble', 'salt', 'scrub', 'snow/ice', 'stone/cobblestone', 'timber', 'wood', 'rock', 'other/unknown']
 
 RoadSurface: TypeAlias = Literal['asphalt', 'gravel/sand', 'ground/dirt/grass', 'metal', 'paved/concrete', 'plastic/rubber', 'rocks', 
-                      'rubble', 'scrub', 'stone/cobblestone', 'timber', 'wood', 'rock', 'other/unknown']
+                                 'rubble', 'scrub', 'stone/cobblestone', 'timber', 'wood', 'rock', 'other/unknown']
 Quality: TypeAlias = Literal[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 29, 
                   30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 44, 45, 46, 49, 50, 51, 52, 55, 56, 59, 
                   60, 66, 69, 70, 80, 90, 91, 92, 95, 96, 97, 
@@ -120,6 +120,15 @@ maxspeed: TypeAlias = int | str | None
 oneway: TypeAlias = str | None
 scenic: TypeAlias = str | None
 scenic_road_ids: TypeAlias = list[int]
+
+landuse: TypeAlias = str
+leisure: TypeAlias = str
+swimming: TypeAlias = str | None
+nat_reserve_type: TypeAlias = str
+otype: TypeAlias = str
+wetland_type: TypeAlias = str
+water_type: TypeAlias = str
+natural: TypeAlias = str
 
 
 WghtFct: TypeAlias = float | np.floating
@@ -203,17 +212,198 @@ class InnerData(TypedDict):
 SubcellDataDict: TypeAlias = dict[SubcellKey, InnerData]
 CellDataDict: TypeAlias = dict[CellKey, SubcellDataDict]
 
+LocalityNodesTuple: TypeAlias = tuple[tagset_id, name, name_de, name_en, lat, lon, addr_city, wikipedia, website, description, heritage, radius]
+LocalityNodesDict: TypeAlias = Dict[SpecialKey | int, Dict[CellKey, Dict[SubcellKey, set[int]]] | LocalityNodesTuple]
+LocalityNodesObj: TypeAlias = Union[LocalityNodesDict, EmptyCellStructDict]
+
+
 TourismNodesTuple: TypeAlias = tuple[tagset_id, name, name_de, name_en, lat, lon, addr_city, wikipedia, website, description, heritage, radius]
 TourismNodesDict: TypeAlias = Dict[SpecialKey | int, Dict[CellKey, Dict[SubcellKey, set[int]]] | TourismNodesTuple]
 TourismNodesObj: TypeAlias = Union[TourismNodesDict, EmptyCellStructDict]
 
+
+#TourismNodesDataTuple: TypeAlias = tuple[tagset_id, name, name_de, name_en, lat, lon, addr_city, wikipedia, website, description, heritage]
+#TourismNodesDataDict: TypeAlias = Dict[SpecialKey | OsmNodeId, Dict[CellKey, Dict[SubcellKey, set[int]]] | TourismNodesDataTuple]
+
 #         tourism_area_dict[id] = (name, name_de, name_en, addr_city, wikipedia, website, heritage, *tagset, poly)
-TourismAreasTuple: TypeAlias = tuple[name, name_de, name_en, addr_city, wikipedia, website, heritage, BaseGeometry]
-TourismAreasBBoxList: TypeAlias = list[set[tuple[OsmAreaId, FlexNumeric, FlexNumeric, 
+T = TypeVar("T") # This will represent your Tagset
+TourismAreasTupleLong: TypeAlias = tuple[name, name_de, name_en, addr_city, wikipedia, website, heritage, T, BaseGeometry]
+TourismAreasTupleShort: TypeAlias = tuple[name, name_de, name_en, addr_city, T, BaseGeometry]
+TourismAreasBBoxList: TypeAlias = list[set[tuple[OsmAreaId | CellOsmAreaId, FlexNumeric, FlexNumeric, 
                                        FlexNumeric, BBoxInt]]]
-TourismAreasDict: TypeAlias = Dict[SpecialKey | int, TourismAreasBBoxList | TourismAreasTuple]
+TourismAreasDict: TypeAlias = Dict[SpecialKey | int | CellOsmAreaId, 
+                                   TourismAreasBBoxList | TourismAreasTupleLong[TourismTagset]]
+TourismMergedDict: TypeAlias = Dict[SpecialKey | int | CellOsmAreaId | OsmNodeId, 
+                                    TourismAreasBBoxList | TourismAreasTupleShort[TourismTagset]]
 #         tourism_area_dict[-1].append((id, w, h, poly_area_m2, bbox))
 TourismAreasObj: TypeAlias = Union[TourismAreasDict, EmptyCellStructDict]
+
+
+
+# A generic "Template" for your OSM rows
+# This says: "A tuple that starts with 7 strings, ends with Geometry, 
+# and has 'T' (the tagset) in the middle."
+TourismRowTemplate: TypeAlias = tuple[
+    name, name_de, name_en, addr_city, wikipedia, website, heritage, 
+    T, 
+    BaseGeometry
+]
+
+# Now the dictionary is much cleaner:
+# Mypy will check that whatever you put in 'tagset' matches 'TourismTagset'
+TourismAreaDict: TypeAlias = dict[OsmAreaId, TourismRowTemplate[TourismTagset]]
+
+# Similarly for the general area:
+AreaRowTemplate: TypeAlias = tuple[name, name_de, name_en, addr_city, T, BaseGeometry]
+AreaDict: TypeAlias = dict[OsmAreaId, AreaRowTemplate[TourismTagset]]
+
+#class Tourism
+#TourismAreasTuple: TypeAlias = tuple[name, name_de, name_en, addr_city, wikipedia, website, heritage, BaseGeometry]
+
+
+
+
+Lvl1AreaTypes: TypeAlias = Literal['forest', 'meadows', 'farmland', 'residential', 'plantation', 'industrial', 
+                                   'water', 'geology', 'park', 'nature_reserve', 'wetland']
+
+
+@runtime_checkable
+class AreaPayload(Protocol):
+    # Base structure for what all items in the queue must share
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # The 'tail' can be anything
+
+class LanduseRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    landuse: str
+    geometry: BaseGeometry
+
+class LeisureRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    name_de: str | None
+    leisure: str
+    swimming: str | None
+    wikipedia: str | None
+    geometry: BaseGeometry
+
+class WetlandRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    name_de: str | None
+    leisure: str
+    otype: str
+    wetland_type: str | None
+    wikipedia: str | None
+    geometry: BaseGeometry
+
+class NatureReserveRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    name_de: str | None
+    leisure: str
+    nat_reserve_type: str
+    wikipedia: str | None
+    geometry: BaseGeometry
+
+class WaterRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    name_de: str | None
+    water_type: str
+    wikipedia: str | None
+    geometry: BaseGeometry
+
+class NaturalRecord(NamedTuple):
+    # Header (Common)
+    key: FnamesValid
+    id: OsmAreaId
+    area_type: Lvl1AreaTypes
+    w: int
+    h: int
+    area_m2: int
+    bbox: BBox
+    # Tail (Specific)
+    name: str
+    name_de: str | None
+    natural: str
+    wikipedia: str | None
+    geometry: BaseGeometry
+
+
+LanduseType: TypeAlias = tuple[name, landuse, BaseGeometry]
+LeisureType: TypeAlias = tuple[name, name_de, leisure, swimming, wikipedia, BaseGeometry]
+NatureReserveType: TypeAlias = tuple[name, name_de, leisure, nat_reserve_type, wikipedia, BaseGeometry]
+WetlandType: TypeAlias = tuple[name, name_de, leisure, otype, wetland_type, wikipedia, BaseGeometry]
+WaterType: TypeAlias = tuple[name, name_de, water_type, wikipedia, BaseGeometry]
+NaturalType: TypeAlias = tuple[name, name_de, natural, wikipedia, BaseGeometry]
+ResidentialLocType: TypeAlias = tuple[name, otype, OsmLocalityTag | None | Literal['residential'], int, int, int, BaseGeometry]
+
+WaterDict: TypeAlias = dict[SpecialKey | int, dict[CellKey, dict[SubcellKey, set[int]]] | WaterType]
+
+
+
+LanduseDataTuple: TypeAlias = LanduseType | NaturalType | WaterType | LeisureType | NatureReserveType | WetlandType | ResidentialLocType
+LanduseBboxTuple: TypeAlias = tuple[OsmAreaId, int, int, int, BBox]
+LanduseAreaDict: TypeAlias = dict[SpecialKey | OsmAreaId | CellOsmAreaId, 
+                                  list[LanduseBboxTuple] | LanduseDataTuple]
+LanduseDataDict: TypeAlias = dict[Lvl1AreaTypes, LanduseAreaDict]
+
+LanduseMeta: TypeAlias = tuple[name, landuse]
+LeisureMeta: TypeAlias = tuple[name, name_de, leisure, swimming, wikipedia]
+NatureReserveMeta: TypeAlias = tuple[name, name_de, leisure, nat_reserve_type, wikipedia]
+WetlandMeta: TypeAlias = tuple[name, name_de, leisure, otype, wetland_type, wikipedia]
+WaterMeta: TypeAlias = tuple[name, name_de, water_type, wikipedia]
+NaturalMeta: TypeAlias = tuple[name, name_de, natural, wikipedia]
+
+LanduseMetaTuple: TypeAlias = LanduseMeta | NaturalMeta | WaterMeta | LeisureMeta | NatureReserveMeta | WetlandMeta
 
 
 HighwaysTuple: TypeAlias = tuple[highway_type, name, lanes, maxspeed, oneway, is_tunnel, scenic, scenic_road_ids, OsmNodesList]
@@ -227,6 +417,14 @@ RailwaysObj: TypeAlias = Union[RailwaysDict, EmptyCellStructDict]
 WaterwaysTuple: TypeAlias = tuple[waterway_type, name, name_de, is_tunnel, is_intermittent, OsmNodesList]
 WaterwaysDict: TypeAlias = Dict[SpecialKey | int, Dict[CellKey, Dict[SubcellKey, set[int]]] | WaterwaysTuple]
 WaterwaysObj: TypeAlias = Union[WaterwaysDict, EmptyCellStructDict]
+
+WaysDataDict: TypeAlias = WaterwaysDict | RailwaysDict | HighwaysDict
+
+WaterwaysMeta: TypeAlias = tuple[waterway_type, name, name_de, is_tunnel, is_intermittent, OsmNodesList]
+HighwaysMeta: TypeAlias = tuple[highway_type, name, lanes, maxspeed, oneway, is_tunnel, scenic, scenic_road_ids, OsmNodesList]
+RailwaysMeta: TypeAlias = tuple[railway_type, name, is_tunnel, is_bridge, OsmNodesList]
+
+WaysMetaTuple: TypeAlias = WaterwaysMeta | HighwaysMeta | RailwaysMeta
 
 
 CoastlineTuple: TypeAlias = Tuple[name, OsmNodesList]
