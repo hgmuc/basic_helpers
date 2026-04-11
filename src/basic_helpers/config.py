@@ -6,7 +6,7 @@ from typing import List, Dict, Set, Final, Literal, TypeAlias
 #PKG_DIRS = ['geom-helpers', 'basic-helpers', 'shape2code-helper', 'rd-observability', 'code-dem-helper',
 #            'env-api-helper', 'dtz-code-helper', 'llm-helpers', 'terrainclassifier', 'add-features', 'photon-helper']
 
-OsmWayId = int
+OsmWayId: TypeAlias = int
 
 # Data directory
 data_base_path: str = 'C:\\01_AnacondaProjects\\osmium'
