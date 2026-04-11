@@ -100,6 +100,11 @@ class TourismAreaTagsDictOLD(TypedDict, total=False):
     geom: BaseGeometry
 
 
+class UrbIdxAreaTracker(TypedDict, total=False):
+    total_area: float
+    area_ids: set[OsmAreaId]
+
+
 # 1 [('peak',)]
 # 3 [('locality', 'place'), ('mountain_pass', 'mountain_pass'), ('volcano', 'dormant'), ('volcano', 'active'), ('volcano', None), ('volcano', 'extinct')]
 # 5 [('barrier_node', 'barrier')]
